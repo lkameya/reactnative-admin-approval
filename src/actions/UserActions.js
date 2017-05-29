@@ -2,7 +2,9 @@ import axios from 'axios';
 import {
     FETCH_USERS_SUCCESS,
     USER_UPDATE,
-    FETCH_USER_WORK
+    FETCH_USER_WORK,
+    ADD_MONTH,
+    SUB_MONTH
 } from './types';
 
 export const fetchAllUsers = () => {
@@ -17,10 +19,10 @@ export const fetchAllUsers = () => {
     };
 };
 
-export const getCurrentUser = (userId) => {
+export const getCurrentUser = (userId, month) => {
+    console.log('GET USER' + userId + '  ' + month);
     return (dispatch) => {
         dispatch({ type: USER_UPDATE, payload: userId });
-        const month = 10;
         const URL = `https://timesheet-staging-aurity.herokuapp.com/api/training/weeks/${month}/2017/${userId}`;
         axios.get(URL)
             .then(response => {
@@ -32,6 +34,21 @@ export const getCurrentUser = (userId) => {
             });
     };
 };
+
+export const addMonth = (userId, month) => {
+    return (dispatch) => {
+        dispatch({ type: ADD_MONTH, payload: month });
+        getCurrentUser(userId, month);
+    };
+};
+
+export const subMonth = (userId, month) => {
+    return (dispatch) => {
+        dispatch({ type: SUB_MONTH, payload: month });
+        getCurrentUser(userId, month);
+    };
+};
+
 
 
 

@@ -3,23 +3,27 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Picker } from 'react-native';
 import Calendar from 'react-native-calendar';
-import { fetchAllUsers, getCurrentUser, approveWork } from '../actions';
+import { fetchAllUsers, getCurrentUser, approveWork, addMonth, subMonth } from '../actions';
 import { Card, CardSection, Button, Spinner } from './common';
 
 
 class ApprovalForm extends Component {
 
     componentWillMount() {
+        console.log('PASSEI AQUI JAJAJAJA');
         this.props.fetchAllUsers();
     }
 
     onButtonPress() {
         this.props.approveWork(555, 9);
-        console.log(this.props.approved);
-    }   
+    }
 
     onTouchNext() {
-        
+        return this.props.addMonth(this.props.selectedUser, this.props.currentMonth + 1);
+    }
+
+    onTouchPrev() {
+        return this.props.addMonth(this.props.selectedUser, this.props.currentMonth - 1);
     }
 
     renderPicker() {
@@ -30,7 +34,7 @@ class ApprovalForm extends Component {
                     style={styles.picker}
                     mode="dropdown"
                     selectedValue={selectedUser}
-                    onValueChange={user => this.props.getCurrentUser(user)}
+                    onValueChange={user => this.props.getCurrentUser(user, this.props.currentMonth)}
                 >
                     {users.map(user =>
                         <Picker.Item key={user.id} label={user.username} value={user.id} />)}
@@ -50,7 +54,8 @@ class ApprovalForm extends Component {
 
                 <CardSection>
                     <Calendar
-                        onTouchNext={this.onTouchNext.bind(this)} 
+                        onTouchNext={this.onTouchNext.bind(this)}
+                        onTouchPrev={this.onTouchPrev.bind(this)}
                         showControls
                         showEventIndicators
                         customStyle={styles.customStyle}
@@ -105,13 +110,11 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-    const { users, selectedUser, works } = state.users;
+    const { users, selectedUser, works, currentMonth } = state.users;
     const { approved } = state.approval;
-    console.log(approved);
     const daysWork = [];
     const year = works.year;
-    const month = works.month;
-
+    const month = (works.month < 10) ? '0' + works.month : '' + works.month;
     _.map(works.weeks, (week) => {
         if (week.status !== 'approved') {
             _.map(week.days_in_week, (day) => {
@@ -120,11 +123,14 @@ const mapStateToProps = state => {
             });
         }
     });
-    return { users, selectedUser, daysWork, approved };
+    console.log(daysWork);
+    return { users, selectedUser, daysWork, approved, currentMonth };
 };
 
 export default connect(mapStateToProps, {
     fetchAllUsers,
     getCurrentUser,
-    approveWork
+    approveWork,
+    addMonth,
+    subMonth
 })(ApprovalForm);

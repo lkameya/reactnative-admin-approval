@@ -1,7 +1,8 @@
 import axios from 'axios';
 import {
     FETCH_USERS_SUCCESS,
-    USER_UPDATE
+    USER_UPDATE,
+    FETCH_USER_WORK
 } from './types';
 
 export const fetchAllUsers = () => {
@@ -17,24 +18,18 @@ export const fetchAllUsers = () => {
 };
 
 export const getCurrentUser = (userId) => {
-    console.log(userId);
-    return {
-        type: USER_UPDATE,
-        payload: userId
-    };
-};
-
-
-export const fetchWorkByUser = () => {
     return (dispatch) => {
+        dispatch({ type: USER_UPDATE, payload: userId });
         const month = 10;
-        const user = 3;
-        const URL = `https://timesheet-staging-aurity.herokuapp.com/api/training/weeks/${month}/2017/${user}`;
+        const URL = `https://timesheet-staging-aurity.herokuapp.com/api/training/weeks/${month}/2017/${userId}`;
         axios.get(URL)
             .then(response => {
                 if (response.status === 200) {
-                    dispatch({ type: USER_UPDATE, payload: response.data });
+                    dispatch({ type: FETCH_USER_WORK, payload: response.data });
+                } else {
+                    console.log('AOOOOO');
                 }
             });
     };
 };
+

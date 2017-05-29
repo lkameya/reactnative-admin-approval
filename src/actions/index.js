@@ -1,2 +1,2 @@
-export * from './ApprovalActions';
+export * from './UserActions';
 

@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import ApprovalReducer from './ApprovalReducer';
+import UserReducer from './UserReducer';
 
 export default combineReducers({
-    approval: ApprovalReducer
+    users: UserReducer
 });

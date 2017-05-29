@@ -1,32 +1,52 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Picker } from 'react-native';
-import { approveUser } from '../actions';
-import { Card, CardSection, Button, Header } from './common';
+import Calendar from 'react-native-calendar';
+import { fetchAllUsers, getCurrentUser } from '../actions';
+import { Card, CardSection, Button, Spinner } from './common';
+
 
 class ApprovalForm extends Component {
 
+    componentWillMount() {
+        this.props.fetchAllUsers();
+    }
+
     onButtonPress() {
 
+    }
+
+    renderPicker() {
+        const { users, selectedUser } = this.props;
+        console.log(selectedUser);
+        if (users.length > 0) {
+            return (
+                <Picker
+                    style={styles.picker}
+                    mode="dropdown"
+                    selectedValue={this.props.selectedUser}
+                    onValueChange={user => this.props.getCurrentUser(user)}
+                >
+                    {users.map(user =>
+                        <Picker.Item key={user.id} label={user.username} value={user.id} />)}
+
+                </Picker>
+            );
+        }
+        return <Spinner size="large" />;
     }
 
     render() {
         return (
             <Card>
                 <CardSection>
-                    <Picker
-                        style={{ flex: 1 }}
-                    >
-                        <Picker.Item label="Monday" value="Monday" />
-                        <Picker.Item label="Tuesday" value="Tuesday" />
-                        <Picker.Item label="Wednesday" value="Wednesday" />
-                        <Picker.Item label="Thursday" value="Thursday" />
-                        <Picker.Item label="Friday" value="Friday" />
-                        <Picker.Item label="Saturday" value="Saturday" />
-                        <Picker.Item label="Sunday" value="Sunday" />
-                    </Picker>
+                    {this.renderPicker()}
                 </CardSection>
 
+                <CardSection>
+                    <Calendar customStyle={{ day: { fontSize: 15, textAlign: 'center' } }} />
+                </CardSection>
                 <CardSection>
 
                     <Button
@@ -48,11 +68,15 @@ class ApprovalForm extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const { loading } = state.approval;
-    return {
-        loading
-    };
+const styles = {
+    picker: {
+        flex: 1
+    }
 };
 
-export default connect(mapStateToProps, { approveUser })(ApprovalForm);
+const mapStateToProps = state => {
+    const { users, selectedUser } = state.users;
+    return { users, selectedUser };
+};
+
+export default connect(mapStateToProps, { fetchAllUsers, getCurrentUser })(ApprovalForm);

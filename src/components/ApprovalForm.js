@@ -45,7 +45,13 @@ class ApprovalForm extends Component {
                 </CardSection>
 
                 <CardSection>
-                    <Calendar customStyle={{ day: { fontSize: 15, textAlign: 'center' } }} />
+                    <Calendar
+                        showControls
+                        showEventIndicators
+                        customStyle={styles.customStyle}
+                        eventDates={['2017-02-05']}
+
+                    />
                 </CardSection>
                 <CardSection>
 
@@ -71,6 +77,12 @@ class ApprovalForm extends Component {
 const styles = {
     picker: {
         flex: 1
+    },
+    customStyle: {
+        hasEventCircle: {
+            backgroundColor: 'black'
+        },
+        flex: 1 
     }
 };
 

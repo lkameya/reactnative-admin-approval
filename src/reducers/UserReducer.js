@@ -19,7 +19,7 @@ export default (state = INITIAL_STATE, action) => {
             return { ...state, selectedUser: action.payload };
 
         case FETCH_USER_WORK:
-            return { ...state, works: action.payload };
+            return { ...state, works: action.payload.data };
 
         default:
             return state;

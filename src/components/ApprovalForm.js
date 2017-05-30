@@ -10,7 +10,6 @@ import { Card, CardSection, Button, Spinner } from './common';
 class ApprovalForm extends Component {
 
     componentWillMount() {
-        console.log('PASSEI AQUI JAJAJAJA');
         this.props.fetchAllUsers();
     }
 
@@ -114,7 +113,7 @@ const mapStateToProps = state => {
     const { approved } = state.approval;
     const daysWork = [];
     const year = works.year;
-    const month = (works.month < 10) ? '0' + works.month : '' + works.month;
+    const month = (works.month < 10) ? `0${works.month}` : `${works.month}`;
     _.map(works.weeks, (week) => {
         if (week.status !== 'approved') {
             _.map(week.days_in_week, (day) => {
@@ -123,7 +122,6 @@ const mapStateToProps = state => {
             });
         }
     });
-    console.log(daysWork);
     return { users, selectedUser, daysWork, approved, currentMonth };
 };
 

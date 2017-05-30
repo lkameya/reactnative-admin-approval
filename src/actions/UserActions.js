@@ -20,7 +20,6 @@ export const fetchAllUsers = () => {
 };
 
 export const getCurrentUser = (userId, month) => {
-    console.log('GET USER' + userId + '  ' + month);
     return (dispatch) => {
         dispatch({ type: USER_UPDATE, payload: userId });
         const URL = `https://timesheet-staging-aurity.herokuapp.com/api/training/weeks/${month}/2017/${userId}`;
@@ -28,8 +27,6 @@ export const getCurrentUser = (userId, month) => {
             .then(response => {
                 if (response.status === 200) {
                     dispatch({ type: FETCH_USER_WORK, payload: response.data });
-                } else {
-                    console.log('AOOOOO');
                 }
             });
     };
@@ -48,7 +45,3 @@ export const subMonth = (userId, month) => {
         getCurrentUser(userId, month);
     };
 };
-
-
-
-
